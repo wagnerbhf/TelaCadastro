@@ -1,0 +1,645 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="GerenciamentoModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="TB_Area">
+          <Key>
+            <PropertyRef Name="IdArea" />
+          </Key>
+          <Property Name="IdArea" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdEmpresa" Type="int" Nullable="false" />
+          <Property Name="Descricao" Type="varchar" MaxLength="150" />
+          <Property Name="Sigla" Type="varchar" MaxLength="6" />
+        </EntityType>
+        <EntityType Name="TB_Empresa">
+          <Key>
+            <PropertyRef Name="IdEmpresa" />
+          </Key>
+          <Property Name="IdEmpresa" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RazaoSocial" Type="varchar" MaxLength="50" />
+          <Property Name="CNPJ" Type="varchar" MaxLength="20" />
+          <Property Name="Email" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="TB_Grupo">
+          <Key>
+            <PropertyRef Name="IdGrupo" />
+          </Key>
+          <Property Name="IdGrupo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdEmpresa" Type="int" Nullable="false" />
+          <Property Name="Descricao" Type="varchar" MaxLength="150" />
+          <Property Name="Sigla" Type="varchar" MaxLength="2" />
+          <Property Name="IdArea" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TB_GrupoPerfil">
+          <Key>
+            <PropertyRef Name="IdGrupo" />
+            <PropertyRef Name="IdEmpresa" />
+            <PropertyRef Name="IdMenu" />
+          </Key>
+          <Property Name="IdGrupo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdEmpresa" Type="int" Nullable="false" />
+          <Property Name="IdMenu" Type="int" Nullable="false" />
+          <Property Name="Bloqueado" Type="bit" />
+          <Property Name="Todos" Type="bit" />
+          <Property Name="Pesquisa" Type="bit" />
+          <Property Name="Inclusao" Type="bit" />
+          <Property Name="Alteracao" Type="bit" />
+          <Property Name="Delecao" Type="bit" />
+          <Property Name="Impressao" Type="bit" />
+          <Property Name="Exportacao" Type="bit" />
+        </EntityType>
+        <EntityType Name="TB_Menu">
+          <Key>
+            <PropertyRef Name="IdMenu" />
+          </Key>
+          <Property Name="IdMenu" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdEmpresa" Type="int" />
+          <Property Name="Caption" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="Descricao" Type="varchar" MaxLength="200" />
+          <Property Name="Parent_ID" Type="int" />
+          <Property Name="URL" Type="varchar" MaxLength="300" />
+          <Property Name="Seguranca" Type="bit" />
+          <Property Name="Menu" Type="bit" />
+          <Property Name="Ordem" Type="int" />
+        </EntityType>
+        <EntityType Name="TB_Usuario">
+          <Key>
+            <PropertyRef Name="IdUsuario" />
+          </Key>
+          <Property Name="IdUsuario" Type="int" Nullable="false" />
+          <Property Name="IdEmpresa" Type="int" Nullable="false" />
+          <Property Name="Nome" Type="varchar" MaxLength="250" />
+          <Property Name="Login" Type="varchar" MaxLength="250" />
+          <Property Name="Senha" Type="varchar" MaxLength="50" />
+          <Property Name="Email" Type="varchar" MaxLength="150" />
+          <Property Name="Ativo" Type="bit" />
+          <Property Name="DataValidade" Type="date" />
+        </EntityType>
+        <EntityType Name="TB_UsuarioGrupo">
+          <Key>
+            <PropertyRef Name="IdUsuario" />
+            <PropertyRef Name="IdGrupo" />
+          </Key>
+          <Property Name="IdUsuario" Type="int" Nullable="false" />
+          <Property Name="IdGrupo" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_TB_Area_TB_Empresa">
+          <End Role="TB_Empresa" Type="Self.TB_Empresa" Multiplicity="1" />
+          <End Role="TB_Area" Type="Self.TB_Area" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TB_Empresa">
+              <PropertyRef Name="IdEmpresa" />
+            </Principal>
+            <Dependent Role="TB_Area">
+              <PropertyRef Name="IdEmpresa" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TB_Grupo_TB_Area">
+          <End Role="TB_Area" Type="Self.TB_Area" Multiplicity="1" />
+          <End Role="TB_Grupo" Type="Self.TB_Grupo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TB_Area">
+              <PropertyRef Name="IdArea" />
+            </Principal>
+            <Dependent Role="TB_Grupo">
+              <PropertyRef Name="IdArea" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TB_Grupo_TB_Empresa">
+          <End Role="TB_Empresa" Type="Self.TB_Empresa" Multiplicity="1" />
+          <End Role="TB_Grupo" Type="Self.TB_Grupo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TB_Empresa">
+              <PropertyRef Name="IdEmpresa" />
+            </Principal>
+            <Dependent Role="TB_Grupo">
+              <PropertyRef Name="IdEmpresa" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TB_GrupoPerfil_TB_Empresa">
+          <End Role="TB_Empresa" Type="Self.TB_Empresa" Multiplicity="1" />
+          <End Role="TB_GrupoPerfil" Type="Self.TB_GrupoPerfil" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TB_Empresa">
+              <PropertyRef Name="IdEmpresa" />
+            </Principal>
+            <Dependent Role="TB_GrupoPerfil">
+              <PropertyRef Name="IdEmpresa" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TB_GrupoPerfil_TB_Grupo">
+          <End Role="TB_Grupo" Type="Self.TB_Grupo" Multiplicity="1" />
+          <End Role="TB_GrupoPerfil" Type="Self.TB_GrupoPerfil" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TB_Grupo">
+              <PropertyRef Name="IdGrupo" />
+            </Principal>
+            <Dependent Role="TB_GrupoPerfil">
+              <PropertyRef Name="IdGrupo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TB_GrupoPerfil_TB_Menu">
+          <End Role="TB_Menu" Type="Self.TB_Menu" Multiplicity="1" />
+          <End Role="TB_GrupoPerfil" Type="Self.TB_GrupoPerfil" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TB_Menu">
+              <PropertyRef Name="IdMenu" />
+            </Principal>
+            <Dependent Role="TB_GrupoPerfil">
+              <PropertyRef Name="IdMenu" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TB_Menu_TB_Empresa">
+          <End Role="TB_Empresa" Type="Self.TB_Empresa" Multiplicity="0..1" />
+          <End Role="TB_Menu" Type="Self.TB_Menu" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TB_Empresa">
+              <PropertyRef Name="IdEmpresa" />
+            </Principal>
+            <Dependent Role="TB_Menu">
+              <PropertyRef Name="IdEmpresa" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TB_Usuario_TB_Empresa">
+          <End Role="TB_Empresa" Type="Self.TB_Empresa" Multiplicity="1" />
+          <End Role="TB_Usuario" Type="Self.TB_Usuario" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TB_Empresa">
+              <PropertyRef Name="IdEmpresa" />
+            </Principal>
+            <Dependent Role="TB_Usuario">
+              <PropertyRef Name="IdEmpresa" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TB_UsuarioGrupo_TB_Grupo">
+          <End Role="TB_Grupo" Type="Self.TB_Grupo" Multiplicity="1" />
+          <End Role="TB_UsuarioGrupo" Type="Self.TB_UsuarioGrupo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TB_Grupo">
+              <PropertyRef Name="IdGrupo" />
+            </Principal>
+            <Dependent Role="TB_UsuarioGrupo">
+              <PropertyRef Name="IdGrupo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TB_UsuarioGrupo_TB_Usuario">
+          <End Role="TB_Usuario" Type="Self.TB_Usuario" Multiplicity="1" />
+          <End Role="TB_UsuarioGrupo" Type="Self.TB_UsuarioGrupo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TB_Usuario">
+              <PropertyRef Name="IdUsuario" />
+            </Principal>
+            <Dependent Role="TB_UsuarioGrupo">
+              <PropertyRef Name="IdUsuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="GerenciamentoModelStoreContainer">
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TB_Area" EntityType="Self.TB_Area" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TB_Empresa" EntityType="Self.TB_Empresa" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TB_Grupo" EntityType="Self.TB_Grupo" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TB_GrupoPerfil" EntityType="Self.TB_GrupoPerfil" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TB_Menu" EntityType="Self.TB_Menu" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TB_Usuario" EntityType="Self.TB_Usuario" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TB_UsuarioGrupo" EntityType="Self.TB_UsuarioGrupo" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_TB_Area_TB_Empresa" Association="Self.FK_TB_Area_TB_Empresa">
+            <End Role="TB_Empresa" EntitySet="TB_Empresa" />
+            <End Role="TB_Area" EntitySet="TB_Area" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TB_Grupo_TB_Area" Association="Self.FK_TB_Grupo_TB_Area">
+            <End Role="TB_Area" EntitySet="TB_Area" />
+            <End Role="TB_Grupo" EntitySet="TB_Grupo" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TB_Grupo_TB_Empresa" Association="Self.FK_TB_Grupo_TB_Empresa">
+            <End Role="TB_Empresa" EntitySet="TB_Empresa" />
+            <End Role="TB_Grupo" EntitySet="TB_Grupo" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TB_GrupoPerfil_TB_Empresa" Association="Self.FK_TB_GrupoPerfil_TB_Empresa">
+            <End Role="TB_Empresa" EntitySet="TB_Empresa" />
+            <End Role="TB_GrupoPerfil" EntitySet="TB_GrupoPerfil" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TB_GrupoPerfil_TB_Grupo" Association="Self.FK_TB_GrupoPerfil_TB_Grupo">
+            <End Role="TB_Grupo" EntitySet="TB_Grupo" />
+            <End Role="TB_GrupoPerfil" EntitySet="TB_GrupoPerfil" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TB_GrupoPerfil_TB_Menu" Association="Self.FK_TB_GrupoPerfil_TB_Menu">
+            <End Role="TB_Menu" EntitySet="TB_Menu" />
+            <End Role="TB_GrupoPerfil" EntitySet="TB_GrupoPerfil" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TB_Menu_TB_Empresa" Association="Self.FK_TB_Menu_TB_Empresa">
+            <End Role="TB_Empresa" EntitySet="TB_Empresa" />
+            <End Role="TB_Menu" EntitySet="TB_Menu" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TB_Usuario_TB_Empresa" Association="Self.FK_TB_Usuario_TB_Empresa">
+            <End Role="TB_Empresa" EntitySet="TB_Empresa" />
+            <End Role="TB_Usuario" EntitySet="TB_Usuario" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TB_UsuarioGrupo_TB_Grupo" Association="Self.FK_TB_UsuarioGrupo_TB_Grupo">
+            <End Role="TB_Grupo" EntitySet="TB_Grupo" />
+            <End Role="TB_UsuarioGrupo" EntitySet="TB_UsuarioGrupo" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TB_UsuarioGrupo_TB_Usuario" Association="Self.FK_TB_UsuarioGrupo_TB_Usuario">
+            <End Role="TB_Usuario" EntitySet="TB_Usuario" />
+            <End Role="TB_UsuarioGrupo" EntitySet="TB_UsuarioGrupo" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="GerenciamentoModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="TB_Area">
+          <Key>
+            <PropertyRef Name="IdArea" />
+          </Key>
+          <Property Name="IdArea" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdEmpresa" Type="Int32" Nullable="false" />
+          <Property Name="Descricao" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="Sigla" Type="String" MaxLength="6" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="TB_Empresa" Relationship="Self.FK_TB_Area_TB_Empresa" FromRole="TB_Area" ToRole="TB_Empresa" />
+          <NavigationProperty Name="TB_Grupo" Relationship="Self.FK_TB_Grupo_TB_Area" FromRole="TB_Area" ToRole="TB_Grupo" />
+        </EntityType>
+        <EntityType Name="TB_Empresa">
+          <Key>
+            <PropertyRef Name="IdEmpresa" />
+          </Key>
+          <Property Name="IdEmpresa" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RazaoSocial" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CNPJ" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="TB_Area" Relationship="Self.FK_TB_Area_TB_Empresa" FromRole="TB_Empresa" ToRole="TB_Area" />
+          <NavigationProperty Name="TB_Grupo" Relationship="Self.FK_TB_Grupo_TB_Empresa" FromRole="TB_Empresa" ToRole="TB_Grupo" />
+          <NavigationProperty Name="TB_GrupoPerfil" Relationship="Self.FK_TB_GrupoPerfil_TB_Empresa" FromRole="TB_Empresa" ToRole="TB_GrupoPerfil" />
+          <NavigationProperty Name="TB_Menu" Relationship="Self.FK_TB_Menu_TB_Empresa" FromRole="TB_Empresa" ToRole="TB_Menu" />
+          <NavigationProperty Name="TB_Usuario" Relationship="Self.FK_TB_Usuario_TB_Empresa" FromRole="TB_Empresa" ToRole="TB_Usuario" />
+        </EntityType>
+        <EntityType Name="TB_Grupo">
+          <Key>
+            <PropertyRef Name="IdGrupo" />
+          </Key>
+          <Property Name="IdGrupo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdEmpresa" Type="Int32" Nullable="false" />
+          <Property Name="Descricao" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="Sigla" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Name="IdArea" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="TB_Area" Relationship="Self.FK_TB_Grupo_TB_Area" FromRole="TB_Grupo" ToRole="TB_Area" />
+          <NavigationProperty Name="TB_Empresa" Relationship="Self.FK_TB_Grupo_TB_Empresa" FromRole="TB_Grupo" ToRole="TB_Empresa" />
+          <NavigationProperty Name="TB_GrupoPerfil" Relationship="Self.FK_TB_GrupoPerfil_TB_Grupo" FromRole="TB_Grupo" ToRole="TB_GrupoPerfil" />
+          <NavigationProperty Name="TB_Usuario" Relationship="Self.TB_UsuarioGrupo" FromRole="TB_Grupo" ToRole="TB_Usuario" />
+        </EntityType>
+        <EntityType Name="TB_GrupoPerfil">
+          <Key>
+            <PropertyRef Name="IdGrupo" />
+            <PropertyRef Name="IdEmpresa" />
+            <PropertyRef Name="IdMenu" />
+          </Key>
+          <Property Name="IdGrupo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdEmpresa" Type="Int32" Nullable="false" />
+          <Property Name="IdMenu" Type="Int32" Nullable="false" />
+          <Property Name="Bloqueado" Type="Boolean" />
+          <Property Name="Todos" Type="Boolean" />
+          <Property Name="Pesquisa" Type="Boolean" />
+          <Property Name="Inclusao" Type="Boolean" />
+          <Property Name="Alteracao" Type="Boolean" />
+          <Property Name="Delecao" Type="Boolean" />
+          <Property Name="Impressao" Type="Boolean" />
+          <Property Name="Exportacao" Type="Boolean" />
+          <NavigationProperty Name="TB_Empresa" Relationship="Self.FK_TB_GrupoPerfil_TB_Empresa" FromRole="TB_GrupoPerfil" ToRole="TB_Empresa" />
+          <NavigationProperty Name="TB_Grupo" Relationship="Self.FK_TB_GrupoPerfil_TB_Grupo" FromRole="TB_GrupoPerfil" ToRole="TB_Grupo" />
+          <NavigationProperty Name="TB_Menu" Relationship="Self.FK_TB_GrupoPerfil_TB_Menu" FromRole="TB_GrupoPerfil" ToRole="TB_Menu" />
+        </EntityType>
+        <EntityType Name="TB_Menu">
+          <Key>
+            <PropertyRef Name="IdMenu" />
+          </Key>
+          <Property Name="IdMenu" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdEmpresa" Type="Int32" />
+          <Property Name="Caption" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Descricao" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="Parent_ID" Type="Int32" />
+          <Property Name="URL" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="Seguranca" Type="Boolean" />
+          <Property Name="Menu" Type="Boolean" />
+          <Property Name="Ordem" Type="Int32" />
+          <NavigationProperty Name="TB_Empresa" Relationship="Self.FK_TB_Menu_TB_Empresa" FromRole="TB_Menu" ToRole="TB_Empresa" />
+          <NavigationProperty Name="TB_GrupoPerfil" Relationship="Self.FK_TB_GrupoPerfil_TB_Menu" FromRole="TB_Menu" ToRole="TB_GrupoPerfil" />
+        </EntityType>
+        <EntityType Name="TB_Usuario">
+          <Key>
+            <PropertyRef Name="IdUsuario" />
+          </Key>
+          <Property Name="IdUsuario" Type="Int32" Nullable="false" />
+          <Property Name="IdEmpresa" Type="Int32" Nullable="false" />
+          <Property Name="Nome" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="Login" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="Senha" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="Ativo" Type="Boolean" />
+          <Property Name="DataValidade" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="TB_Empresa" Relationship="Self.FK_TB_Usuario_TB_Empresa" FromRole="TB_Usuario" ToRole="TB_Empresa" />
+          <NavigationProperty Name="TB_Grupo" Relationship="Self.TB_UsuarioGrupo" FromRole="TB_Usuario" ToRole="TB_Grupo" />
+        </EntityType>
+        <Association Name="FK_TB_Area_TB_Empresa">
+          <End Role="TB_Empresa" Type="Self.TB_Empresa" Multiplicity="1" />
+          <End Role="TB_Area" Type="Self.TB_Area" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TB_Empresa">
+              <PropertyRef Name="IdEmpresa" />
+            </Principal>
+            <Dependent Role="TB_Area">
+              <PropertyRef Name="IdEmpresa" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TB_Grupo_TB_Area">
+          <End Role="TB_Area" Type="Self.TB_Area" Multiplicity="1" />
+          <End Role="TB_Grupo" Type="Self.TB_Grupo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TB_Area">
+              <PropertyRef Name="IdArea" />
+            </Principal>
+            <Dependent Role="TB_Grupo">
+              <PropertyRef Name="IdArea" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TB_Grupo_TB_Empresa">
+          <End Role="TB_Empresa" Type="Self.TB_Empresa" Multiplicity="1" />
+          <End Role="TB_Grupo" Type="Self.TB_Grupo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TB_Empresa">
+              <PropertyRef Name="IdEmpresa" />
+            </Principal>
+            <Dependent Role="TB_Grupo">
+              <PropertyRef Name="IdEmpresa" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TB_GrupoPerfil_TB_Empresa">
+          <End Role="TB_Empresa" Type="Self.TB_Empresa" Multiplicity="1" />
+          <End Role="TB_GrupoPerfil" Type="Self.TB_GrupoPerfil" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TB_Empresa">
+              <PropertyRef Name="IdEmpresa" />
+            </Principal>
+            <Dependent Role="TB_GrupoPerfil">
+              <PropertyRef Name="IdEmpresa" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TB_Menu_TB_Empresa">
+          <End Role="TB_Empresa" Type="Self.TB_Empresa" Multiplicity="0..1" />
+          <End Role="TB_Menu" Type="Self.TB_Menu" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TB_Empresa">
+              <PropertyRef Name="IdEmpresa" />
+            </Principal>
+            <Dependent Role="TB_Menu">
+              <PropertyRef Name="IdEmpresa" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TB_Usuario_TB_Empresa">
+          <End Role="TB_Empresa" Type="Self.TB_Empresa" Multiplicity="1" />
+          <End Role="TB_Usuario" Type="Self.TB_Usuario" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TB_Empresa">
+              <PropertyRef Name="IdEmpresa" />
+            </Principal>
+            <Dependent Role="TB_Usuario">
+              <PropertyRef Name="IdEmpresa" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TB_GrupoPerfil_TB_Grupo">
+          <End Role="TB_Grupo" Type="Self.TB_Grupo" Multiplicity="1" />
+          <End Role="TB_GrupoPerfil" Type="Self.TB_GrupoPerfil" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TB_Grupo">
+              <PropertyRef Name="IdGrupo" />
+            </Principal>
+            <Dependent Role="TB_GrupoPerfil">
+              <PropertyRef Name="IdGrupo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TB_GrupoPerfil_TB_Menu">
+          <End Role="TB_Menu" Type="Self.TB_Menu" Multiplicity="1" />
+          <End Role="TB_GrupoPerfil" Type="Self.TB_GrupoPerfil" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TB_Menu">
+              <PropertyRef Name="IdMenu" />
+            </Principal>
+            <Dependent Role="TB_GrupoPerfil">
+              <PropertyRef Name="IdMenu" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="TB_UsuarioGrupo">
+          <End Role="TB_Grupo" Type="Self.TB_Grupo" Multiplicity="*" />
+          <End Role="TB_Usuario" Type="Self.TB_Usuario" Multiplicity="*" />
+        </Association>
+        <EntityContainer Name="GerenciamentoContext" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
+          <EntitySet Name="TB_Area" EntityType="Self.TB_Area" />
+          <EntitySet Name="TB_Empresa" EntityType="Self.TB_Empresa" />
+          <EntitySet Name="TB_Grupo" EntityType="Self.TB_Grupo" />
+          <EntitySet Name="TB_GrupoPerfil" EntityType="Self.TB_GrupoPerfil" />
+          <EntitySet Name="TB_Menu" EntityType="Self.TB_Menu" />
+          <EntitySet Name="TB_Usuario" EntityType="Self.TB_Usuario" />
+          <AssociationSet Name="FK_TB_Area_TB_Empresa" Association="Self.FK_TB_Area_TB_Empresa">
+            <End Role="TB_Empresa" EntitySet="TB_Empresa" />
+            <End Role="TB_Area" EntitySet="TB_Area" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TB_Grupo_TB_Area" Association="Self.FK_TB_Grupo_TB_Area">
+            <End Role="TB_Area" EntitySet="TB_Area" />
+            <End Role="TB_Grupo" EntitySet="TB_Grupo" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TB_Grupo_TB_Empresa" Association="Self.FK_TB_Grupo_TB_Empresa">
+            <End Role="TB_Empresa" EntitySet="TB_Empresa" />
+            <End Role="TB_Grupo" EntitySet="TB_Grupo" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TB_GrupoPerfil_TB_Empresa" Association="Self.FK_TB_GrupoPerfil_TB_Empresa">
+            <End Role="TB_Empresa" EntitySet="TB_Empresa" />
+            <End Role="TB_GrupoPerfil" EntitySet="TB_GrupoPerfil" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TB_Menu_TB_Empresa" Association="Self.FK_TB_Menu_TB_Empresa">
+            <End Role="TB_Empresa" EntitySet="TB_Empresa" />
+            <End Role="TB_Menu" EntitySet="TB_Menu" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TB_Usuario_TB_Empresa" Association="Self.FK_TB_Usuario_TB_Empresa">
+            <End Role="TB_Empresa" EntitySet="TB_Empresa" />
+            <End Role="TB_Usuario" EntitySet="TB_Usuario" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TB_GrupoPerfil_TB_Grupo" Association="Self.FK_TB_GrupoPerfil_TB_Grupo">
+            <End Role="TB_Grupo" EntitySet="TB_Grupo" />
+            <End Role="TB_GrupoPerfil" EntitySet="TB_GrupoPerfil" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TB_GrupoPerfil_TB_Menu" Association="Self.FK_TB_GrupoPerfil_TB_Menu">
+            <End Role="TB_Menu" EntitySet="TB_Menu" />
+            <End Role="TB_GrupoPerfil" EntitySet="TB_GrupoPerfil" />
+          </AssociationSet>
+          <AssociationSet Name="TB_UsuarioGrupo" Association="Self.TB_UsuarioGrupo">
+            <End Role="TB_Grupo" EntitySet="TB_Grupo" />
+            <End Role="TB_Usuario" EntitySet="TB_Usuario" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="GerenciamentoModelStoreContainer" CdmEntityContainer="GerenciamentoContext">
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="GerenciamentoModel.sysdiagrams">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TB_Area">
+            <EntityTypeMapping TypeName="GerenciamentoModel.TB_Area">
+              <MappingFragment StoreEntitySet="TB_Area">
+                <ScalarProperty Name="IdArea" ColumnName="IdArea" />
+                <ScalarProperty Name="IdEmpresa" ColumnName="IdEmpresa" />
+                <ScalarProperty Name="Descricao" ColumnName="Descricao" />
+                <ScalarProperty Name="Sigla" ColumnName="Sigla" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TB_Empresa">
+            <EntityTypeMapping TypeName="GerenciamentoModel.TB_Empresa">
+              <MappingFragment StoreEntitySet="TB_Empresa">
+                <ScalarProperty Name="IdEmpresa" ColumnName="IdEmpresa" />
+                <ScalarProperty Name="RazaoSocial" ColumnName="RazaoSocial" />
+                <ScalarProperty Name="CNPJ" ColumnName="CNPJ" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TB_Grupo">
+            <EntityTypeMapping TypeName="GerenciamentoModel.TB_Grupo">
+              <MappingFragment StoreEntitySet="TB_Grupo">
+                <ScalarProperty Name="IdGrupo" ColumnName="IdGrupo" />
+                <ScalarProperty Name="IdEmpresa" ColumnName="IdEmpresa" />
+                <ScalarProperty Name="Descricao" ColumnName="Descricao" />
+                <ScalarProperty Name="Sigla" ColumnName="Sigla" />
+                <ScalarProperty Name="IdArea" ColumnName="IdArea" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TB_GrupoPerfil">
+            <EntityTypeMapping TypeName="GerenciamentoModel.TB_GrupoPerfil">
+              <MappingFragment StoreEntitySet="TB_GrupoPerfil">
+                <ScalarProperty Name="IdGrupo" ColumnName="IdGrupo" />
+                <ScalarProperty Name="IdEmpresa" ColumnName="IdEmpresa" />
+                <ScalarProperty Name="IdMenu" ColumnName="IdMenu" />
+                <ScalarProperty Name="Bloqueado" ColumnName="Bloqueado" />
+                <ScalarProperty Name="Todos" ColumnName="Todos" />
+                <ScalarProperty Name="Pesquisa" ColumnName="Pesquisa" />
+                <ScalarProperty Name="Inclusao" ColumnName="Inclusao" />
+                <ScalarProperty Name="Alteracao" ColumnName="Alteracao" />
+                <ScalarProperty Name="Delecao" ColumnName="Delecao" />
+                <ScalarProperty Name="Impressao" ColumnName="Impressao" />
+                <ScalarProperty Name="Exportacao" ColumnName="Exportacao" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TB_Menu">
+            <EntityTypeMapping TypeName="GerenciamentoModel.TB_Menu">
+              <MappingFragment StoreEntitySet="TB_Menu">
+                <ScalarProperty Name="IdMenu" ColumnName="IdMenu" />
+                <ScalarProperty Name="IdEmpresa" ColumnName="IdEmpresa" />
+                <ScalarProperty Name="Caption" ColumnName="Caption" />
+                <ScalarProperty Name="Descricao" ColumnName="Descricao" />
+                <ScalarProperty Name="Parent_ID" ColumnName="Parent_ID" />
+                <ScalarProperty Name="URL" ColumnName="URL" />
+                <ScalarProperty Name="Seguranca" ColumnName="Seguranca" />
+                <ScalarProperty Name="Menu" ColumnName="Menu" />
+                <ScalarProperty Name="Ordem" ColumnName="Ordem" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TB_Usuario">
+            <EntityTypeMapping TypeName="GerenciamentoModel.TB_Usuario">
+              <MappingFragment StoreEntitySet="TB_Usuario">
+                <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
+                <ScalarProperty Name="IdEmpresa" ColumnName="IdEmpresa" />
+                <ScalarProperty Name="Nome" ColumnName="Nome" />
+                <ScalarProperty Name="Login" ColumnName="Login" />
+                <ScalarProperty Name="Senha" ColumnName="Senha" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Ativo" ColumnName="Ativo" />
+                <ScalarProperty Name="DataValidade" ColumnName="DataValidade" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="TB_UsuarioGrupo" TypeName="GerenciamentoModel.TB_UsuarioGrupo" StoreEntitySet="TB_UsuarioGrupo">
+            <EndProperty Name="TB_Grupo">
+              <ScalarProperty Name="IdGrupo" ColumnName="IdGrupo" />
+            </EndProperty>
+            <EndProperty Name="TB_Usuario">
+              <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
+            </EndProperty>
+          </AssociationSetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

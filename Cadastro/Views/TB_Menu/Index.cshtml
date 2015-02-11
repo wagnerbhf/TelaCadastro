@@ -1,0 +1,75 @@
+﻿@model IEnumerable<Cadastro.TB_Menu>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Caption)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Descricao)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Parent_ID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.URL)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Seguranca)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Menu)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Ordem)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TB_Empresa.RazaoSocial)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Caption)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Descricao)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Parent_ID)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.URL)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Seguranca)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Menu)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Ordem)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TB_Empresa.RazaoSocial)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.IdMenu }) |
+            @Html.ActionLink("Details", "Details", new { id=item.IdMenu }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.IdMenu })
+        </td>
+    </tr>
+}
+
+</table>

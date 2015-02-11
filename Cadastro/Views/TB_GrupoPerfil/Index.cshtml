@@ -1,0 +1,93 @@
+﻿@model IEnumerable<Cadastro.TB_GrupoPerfil>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Bloqueado)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Todos)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Pesquisa)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Inclusao)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Alteracao)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Delecao)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Impressao)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Exportacao)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TB_Empresa.RazaoSocial)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TB_Grupo.Descricao)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TB_Menu.Caption)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Bloqueado)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Todos)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Pesquisa)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Inclusao)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Alteracao)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Delecao)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Impressao)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Exportacao)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TB_Empresa.RazaoSocial)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TB_Grupo.Descricao)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TB_Menu.Caption)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+            @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+        </td>
+    </tr>
+}
+
+</table>
