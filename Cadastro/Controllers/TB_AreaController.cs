@@ -14,9 +14,19 @@ namespace Cadastro.Controllers
    {
       private GerenciamentoContext db = new GerenciamentoContext();
 
+      private void RedirecionarSeNaoEstiverLogado()
+      {
+         if (Session["usuario"] == null)
+         {
+            Response.Redirect(@"~/User/Login");
+         }
+      }
+
       // GET: TB_Area
       public ActionResult Index()
       {
+         RedirecionarSeNaoEstiverLogado();
+
          var tB_Area = db.TB_Area.Include(t => t.TB_Empresa);
          return View(tB_Area.ToList());
       }
@@ -24,6 +34,8 @@ namespace Cadastro.Controllers
       // GET: TB_Area/Details/5
       public ActionResult Details(int? id)
       {
+         RedirecionarSeNaoEstiverLogado();
+
          if (id == null)
          {
             return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -39,6 +51,8 @@ namespace Cadastro.Controllers
       // GET: TB_Area/Create
       public ActionResult Create()
       {
+         RedirecionarSeNaoEstiverLogado();
+
          ViewBag.IdEmpresa = new SelectList(db.TB_Empresa, "IdEmpresa", "RazaoSocial");
          return View();
       }
@@ -50,6 +64,8 @@ namespace Cadastro.Controllers
       [ValidateAntiForgeryToken]
       public ActionResult Create([Bind(Include = "IdArea,IdEmpresa,Descricao,Sigla")] TB_Area tB_Area)
       {
+         RedirecionarSeNaoEstiverLogado();
+
          if (ModelState.IsValid)
          {
             IQueryable<TB_Area> areas = db.TB_Area;
@@ -69,6 +85,8 @@ namespace Cadastro.Controllers
       // GET: TB_Area/Edit/5
       public ActionResult Edit(int? id)
       {
+         RedirecionarSeNaoEstiverLogado();
+
          if (id == null)
          {
             return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -89,6 +107,8 @@ namespace Cadastro.Controllers
       [ValidateAntiForgeryToken]
       public ActionResult Edit([Bind(Include = "IdArea,IdEmpresa,Descricao,Sigla")] TB_Area tB_Area)
       {
+         RedirecionarSeNaoEstiverLogado();
+
          if (ModelState.IsValid)
          {
             db.Entry(tB_Area).State = EntityState.Modified;
@@ -102,6 +122,8 @@ namespace Cadastro.Controllers
       // GET: TB_Area/Delete/5
       public ActionResult Delete(int? id)
       {
+         RedirecionarSeNaoEstiverLogado();
+
          if (id == null)
          {
             return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -119,6 +141,8 @@ namespace Cadastro.Controllers
       [ValidateAntiForgeryToken]
       public ActionResult DeleteConfirmed(int id)
       {
+         RedirecionarSeNaoEstiverLogado();
+
          TB_Area tB_Area = db.TB_Area.Find(id);
          db.TB_Area.Remove(tB_Area);
          db.SaveChanges();

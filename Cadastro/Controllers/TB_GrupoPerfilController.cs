@@ -14,6 +14,14 @@ namespace Cadastro.Controllers
     {
         private GerenciamentoContext db = new GerenciamentoContext();
 
+        private void RedirecionarSeNaoEstiverLogado()
+        {
+           if (Session["usuario"] == null)
+           {
+              Response.Redirect(@"~/User/Login");
+           }
+        }
+
         // GET: TB_GrupoPerfil
         public ActionResult Index()
         {
@@ -24,6 +32,8 @@ namespace Cadastro.Controllers
         // GET: TB_GrupoPerfil/Details/5
         public ActionResult Details(int? id)
         {
+           RedirecionarSeNaoEstiverLogado();
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -39,6 +49,8 @@ namespace Cadastro.Controllers
         // GET: TB_GrupoPerfil/Create
         public ActionResult Create()
         {
+           RedirecionarSeNaoEstiverLogado();
+
             ViewBag.IdEmpresa = new SelectList(db.TB_Empresa, "IdEmpresa", "RazaoSocial");
             ViewBag.IdGrupo = new SelectList(db.TB_Grupo, "IdGrupo", "Descricao");
             ViewBag.IdMenu = new SelectList(db.TB_Menu, "IdMenu", "Caption");
@@ -52,6 +64,8 @@ namespace Cadastro.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "IdGrupo,IdEmpresa,IdMenu,Bloqueado,Todos,Pesquisa,Inclusao,Alteracao,Delecao,Impressao,Exportacao")] TB_GrupoPerfil tB_GrupoPerfil)
         {
+           RedirecionarSeNaoEstiverLogado();
+
             if (ModelState.IsValid)
             {
                tB_GrupoPerfil.TB_Empresa = db.TB_Empresa.First(p => p.IdEmpresa == tB_GrupoPerfil.IdEmpresa);
@@ -72,6 +86,8 @@ namespace Cadastro.Controllers
         // GET: TB_GrupoPerfil/Edit/5
         public ActionResult Edit(int? id)
         {
+           RedirecionarSeNaoEstiverLogado();
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -94,6 +110,8 @@ namespace Cadastro.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "IdGrupo,IdEmpresa,IdMenu,Bloqueado,Todos,Pesquisa,Inclusao,Alteracao,Delecao,Impressao,Exportacao")] TB_GrupoPerfil tB_GrupoPerfil)
         {
+           RedirecionarSeNaoEstiverLogado();
+
             if (ModelState.IsValid)
             {
                 db.Entry(tB_GrupoPerfil).State = EntityState.Modified;
@@ -109,6 +127,8 @@ namespace Cadastro.Controllers
         // GET: TB_GrupoPerfil/Delete/5
         public ActionResult Delete(int? id)
         {
+           RedirecionarSeNaoEstiverLogado();
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -126,6 +146,8 @@ namespace Cadastro.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
+           RedirecionarSeNaoEstiverLogado();
+
             TB_GrupoPerfil tB_GrupoPerfil = db.TB_GrupoPerfil.Find(id);
             db.TB_GrupoPerfil.Remove(tB_GrupoPerfil);
             db.SaveChanges();

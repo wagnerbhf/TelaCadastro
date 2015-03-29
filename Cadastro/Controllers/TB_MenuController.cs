@@ -14,9 +14,19 @@ namespace Cadastro.Controllers
    {
       private GerenciamentoContext db = new GerenciamentoContext();
 
+      private void RedirecionarSeNaoEstiverLogado()
+      {
+         if (Session["usuario"] == null)
+         {
+            Response.Redirect(@"~/User/Login");
+         }
+      }
+
       // GET: TB_Menu
       public ActionResult Index()
       {
+         RedirecionarSeNaoEstiverLogado();
+
          var tB_Menu = db.TB_Menu.Include(t => t.TB_Empresa);
          return View(tB_Menu.ToList());
       }
@@ -24,6 +34,8 @@ namespace Cadastro.Controllers
       // GET: TB_Menu/Details/5
       public ActionResult Details(int? id)
       {
+         RedirecionarSeNaoEstiverLogado();
+
          if (id == null)
          {
             return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -39,6 +51,8 @@ namespace Cadastro.Controllers
       // GET: TB_Menu/Create
       public ActionResult Create()
       {
+         RedirecionarSeNaoEstiverLogado();
+
          ViewBag.IdEmpresa = new SelectList(db.TB_Empresa, "IdEmpresa", "RazaoSocial");
          return View();
       }
@@ -50,6 +64,8 @@ namespace Cadastro.Controllers
       [ValidateAntiForgeryToken]
       public ActionResult Create([Bind(Include = "IdMenu,IdEmpresa,Caption,Descricao,Parent_ID,URL,Seguranca,Menu,Ordem")] TB_Menu tB_Menu)
       {
+         RedirecionarSeNaoEstiverLogado();
+
          if (ModelState.IsValid)
          {
             IQueryable<TB_Menu> menus = db.TB_Menu;
@@ -69,6 +85,8 @@ namespace Cadastro.Controllers
       // GET: TB_Menu/Edit/5
       public ActionResult Edit(int? id)
       {
+         RedirecionarSeNaoEstiverLogado();
+
          if (id == null)
          {
             return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -89,6 +107,8 @@ namespace Cadastro.Controllers
       [ValidateAntiForgeryToken]
       public ActionResult Edit([Bind(Include = "IdMenu,IdEmpresa,Caption,Descricao,Parent_ID,URL,Seguranca,Menu,Ordem")] TB_Menu tB_Menu)
       {
+         RedirecionarSeNaoEstiverLogado();
+
          if (ModelState.IsValid)
          {
             db.Entry(tB_Menu).State = EntityState.Modified;
@@ -102,6 +122,8 @@ namespace Cadastro.Controllers
       // GET: TB_Menu/Delete/5
       public ActionResult Delete(int? id)
       {
+         RedirecionarSeNaoEstiverLogado();
+
          if (id == null)
          {
             return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -119,6 +141,8 @@ namespace Cadastro.Controllers
       [ValidateAntiForgeryToken]
       public ActionResult DeleteConfirmed(int id)
       {
+         RedirecionarSeNaoEstiverLogado();
+
          TB_Menu tB_Menu = db.TB_Menu.Find(id);
          db.TB_Menu.Remove(tB_Menu);
          db.SaveChanges();

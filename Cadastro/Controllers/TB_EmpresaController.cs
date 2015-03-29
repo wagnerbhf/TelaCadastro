@@ -14,15 +14,27 @@ namespace Cadastro.Controllers
    {
       private GerenciamentoContext db = new GerenciamentoContext();
 
+      private void RedirecionarSeNaoEstiverLogado()
+      {
+         if (Session["usuario"] == null)
+         {
+            Response.Redirect(@"~/User/Login");
+         }
+      }
+
       // GET: TB_Empresa
       public ActionResult Index()
       {
+         RedirecionarSeNaoEstiverLogado();
+
          return View(db.TB_Empresa.ToList());
       }
 
       // GET: TB_Empresa/Details/5
       public ActionResult Details(int? id)
       {
+         RedirecionarSeNaoEstiverLogado();
+
          if (id == null)
          {
             return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -38,6 +50,8 @@ namespace Cadastro.Controllers
       // GET: TB_Empresa/Create
       public ActionResult Create()
       {
+         RedirecionarSeNaoEstiverLogado();
+
          return View();
       }
 
@@ -48,6 +62,8 @@ namespace Cadastro.Controllers
       [ValidateAntiForgeryToken]
       public ActionResult Create([Bind(Include = "IdEmpresa,RazaoSocial,CNPJ,Email")] TB_Empresa tB_Empresa)
       {
+         RedirecionarSeNaoEstiverLogado();
+
          if (ModelState.IsValid)
          {
             IQueryable<TB_Empresa> empresas = db.TB_Empresa;
@@ -64,6 +80,8 @@ namespace Cadastro.Controllers
       // GET: TB_Empresa/Edit/5
       public ActionResult Edit(int? id)
       {
+         RedirecionarSeNaoEstiverLogado();
+
          if (id == null)
          {
             return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -83,6 +101,8 @@ namespace Cadastro.Controllers
       [ValidateAntiForgeryToken]
       public ActionResult Edit([Bind(Include = "IdEmpresa,RazaoSocial,CNPJ,Email")] TB_Empresa tB_Empresa)
       {
+         RedirecionarSeNaoEstiverLogado();
+
          if (ModelState.IsValid)
          {
             db.Entry(tB_Empresa).State = EntityState.Modified;
@@ -95,6 +115,8 @@ namespace Cadastro.Controllers
       // GET: TB_Empresa/Delete/5
       public ActionResult Delete(int? id)
       {
+         RedirecionarSeNaoEstiverLogado();
+
          if (id == null)
          {
             return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -112,6 +134,8 @@ namespace Cadastro.Controllers
       [ValidateAntiForgeryToken]
       public ActionResult DeleteConfirmed(int id)
       {
+         RedirecionarSeNaoEstiverLogado();
+
          TB_Empresa tB_Empresa = db.TB_Empresa.Find(id);
          db.TB_Empresa.Remove(tB_Empresa);
          db.SaveChanges();

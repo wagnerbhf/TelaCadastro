@@ -33,7 +33,7 @@ namespace Cadastro.Models
 
       public bool IsValid(string _username, string _password)
       {
-         string cs = ConfigurationManager.ConnectionStrings["GerenciamentoContext"].ConnectionString;
+         string cs = ConfigurationManager.ConnectionStrings["GerenciamentoContextLogin"].ConnectionString;
 
          using (var cn = new SqlConnection(cs))
          {
@@ -62,8 +62,6 @@ namespace Cadastro.Models
                return false;
             }
          }
-
-         return true;
       }
    }
 }

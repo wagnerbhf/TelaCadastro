@@ -15,9 +15,19 @@ namespace Cadastro.Controllers
    {
       private GerenciamentoContext db = new GerenciamentoContext();
 
+      private void RedirecionarSeNaoEstiverLogado()
+      {
+         if (Session["usuario"] == null)
+         {
+            Response.Redirect(@"~/User/Login");
+         }
+      }
+
       // GET: TB_Grupo
       public ActionResult Index()
       {
+         RedirecionarSeNaoEstiverLogado();
+
          var tB_Grupo = db.TB_Grupo.Include(t => t.TB_Area).Include(t => t.TB_Empresa);
          return View(tB_Grupo.ToList());
       }
@@ -25,6 +35,8 @@ namespace Cadastro.Controllers
       // GET: TB_Grupo/Details/5
       public ActionResult Details(int? id)
       {
+         RedirecionarSeNaoEstiverLogado();
+
          if (id == null)
          {
             return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -40,6 +52,8 @@ namespace Cadastro.Controllers
       // GET: TB_Grupo/Create
       public ActionResult Create()
       {
+         RedirecionarSeNaoEstiverLogado();
+
          ViewBag.IdArea = new SelectList(db.TB_Area, "IdArea", "Descricao");
          ViewBag.IdEmpresa = new SelectList(db.TB_Empresa, "IdEmpresa", "RazaoSocial");
          return View();
@@ -52,6 +66,8 @@ namespace Cadastro.Controllers
       [ValidateAntiForgeryToken]
       public ActionResult Create([Bind(Include = "IdGrupo,IdEmpresa,Descricao,Sigla,IdArea")] TB_Grupo tB_Grupo)
       {
+         RedirecionarSeNaoEstiverLogado();
+
          if (ModelState.IsValid)
          {
             IQueryable<TB_Grupo> grupos = db.TB_Grupo;
@@ -94,6 +110,8 @@ namespace Cadastro.Controllers
       // GET: TB_Grupo/Edit/5
       public ActionResult Edit(int? id)
       {
+         RedirecionarSeNaoEstiverLogado();
+
          if (id == null)
          {
             return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -115,6 +133,8 @@ namespace Cadastro.Controllers
       [ValidateAntiForgeryToken]
       public ActionResult Edit([Bind(Include = "IdGrupo,IdEmpresa,Descricao,Sigla,IdArea")] TB_Grupo tB_Grupo)
       {
+         RedirecionarSeNaoEstiverLogado();
+
          if (ModelState.IsValid)
          {
             db.Entry(tB_Grupo).State = EntityState.Modified;
@@ -129,6 +149,8 @@ namespace Cadastro.Controllers
       // GET: TB_Grupo/Delete/5
       public ActionResult Delete(int? id)
       {
+         RedirecionarSeNaoEstiverLogado();
+
          if (id == null)
          {
             return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -146,6 +168,8 @@ namespace Cadastro.Controllers
       [ValidateAntiForgeryToken]
       public ActionResult DeleteConfirmed(int id)
       {
+         RedirecionarSeNaoEstiverLogado();
+
          TB_Grupo tB_Grupo = db.TB_Grupo.Find(id);
          db.TB_Grupo.Remove(tB_Grupo);
          db.SaveChanges();
